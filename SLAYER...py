@@ -10,8 +10,7 @@ from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
 
-TOKEN = '7031476424:AAG6bW4N65VCpxyOgdjiWQ6FYbVnGal2uXY'
-CHANNEL_ID = -1002161930825
+TOKEN = '7401408334:AAEzaSDcf_eukLhDnKSkZ5HJWmw-LADH8Y4'
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
